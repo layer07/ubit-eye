@@ -1,30 +1,40 @@
 
  # μBiT::EYE MinerPulse
- ## _Observability tool for MicroBT WhatsMiner miners._
+ ## _Observability tool for MicroBT WhatsMiner ASICs._
  [![N|Solid](https://i.imgur.com/EyqeszJ.png)](https://kernelriot.com)
-
  
  [![License: GPL-2.0-or-later](https://img.shields.io/badge/GPL2.0+-License-red)](https://github.com/layer07/ubit-eye/blob/main/LICENSE)
  
- uBiT::EYE MinerPulse is a lean backend for monitoring MicroBT WhatsMiner devices.  
- It runs fast on Windows and Linux with zero bloat.
+ **μBiT::EYE MinerPulse** is a lean backend solution for monitoring *MicroBT WhatsMiner ASICs*.  
+ It runs **fast** on Windows and Linux with **zero bloat.**
  
  - **Fast Scanner:** Detects live miners in seconds.
  - **Secure Communication:** HTTPS & WSS.
  - **Minimal & No-Fuzz:** Static classes, minimal APIs, low abstraction.
- - **Extreme Performance:** Ultra-low latency, minimal overhead.
+ - **Extreme Performance:** Ultra-low latency, near zero overhead.
+
+# ONE::BINARY
+
+ ![Running](https://kernelriot.com/ext/MinerPulseRun.gif)()
  
+
+
  ## Features
  
- - **Dynamic Config:**  
-   Auto-generates a config file (`app.conf`) on first run.
- - **Real-Time Scanning:**  
-   Constantly updates miner statuses.
- - **Secure Metrics:**  
-   Exposes Prometheus metrics via secure WebSocket.
- - **Cross-Platform:**  
-   Runs natively on Windows and Linux.
+- **Dynamic Config:**  
+  Auto-generates a config file (`app.conf`) on first run.
+- **Real-Time Scanning:**  
+  Constantly gets and updates miners sensor status.
+- **Secure Metrics:**  
+  Serves *(via WebSocket + with Auth)* as a data provider.
+- **Prometheus Exporter:**  
+  Exposes a metrics endpoint at `/metrics`.
+- **Cross-Platform:**  
+  Runs natively on Windows and Linux.
  
+ # REALLY::FAST
+ ![Running](https://kernelriot.com/ext/Debug2.gif)()
+
  ## Installation
  
  ### Prerequisites
