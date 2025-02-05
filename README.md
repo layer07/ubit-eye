@@ -1,7 +1,8 @@
 
  # μBiT::EYE MinerPulse
  ## _Observability tool for MicroBT WhatsMiner miners._
- [![N|Solid](https://i.imgur.com/mpicon.png)](https://kernelriot.com)
+ [![N|Solid](https://i.imgur.com/EyqeszJ.png)](https://kernelriot.com)
+
  
  [![License: GPL-2.0-or-later](https://img.shields.io/badge/GPL2.0+-License-red)](https://github.com/layer07/ubit-eye/blob/main/LICENSE)
  
