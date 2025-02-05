@@ -20,34 +20,24 @@
  *         ░ ░    ░   ▒   ▒ ▒ ░░     ░     ░░   ░ 
  *           ░  ░     ░  ░░ ░        ░  ░   ░     
  */
-
 using MinerPulse.Models;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace MinerPulse
 {
 	public static class Watcher
 	{
-		// Blacklist to store miner IDs that cannot respond to "get_error_code"
 		private static readonly ConcurrentDictionary<int, bool> Blacklist = new ConcurrentDictionary<int, bool>();
 
 		private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
 		{
 			AllowTrailingCommas = true,
 			PropertyNameCaseInsensitive = true,
-			Converters = {
-				new JsonStringEnumConverter(),
-				new StringOrNumberJsonConverter() 
-                // Removed SingleOrArrayConverter from global converters
-            }
+			Converters = { new JsonStringEnumConverter(), new StringOrNumberJsonConverter() }
 		};
 
 		public static async Task Watch()
@@ -66,22 +56,17 @@ namespace MinerPulse
 		{
 			try
 			{
-				// Send and deserialize summary
 				string summaryJson = await SendCommandAsync(miner.IP, "summary");
 				SummaryResponse summary = Deserialize<SummaryResponse>(summaryJson);
 
-				// Send and deserialize devices
 				string devicesJson = await SendCommandAsync(miner.IP, "edevs");
 				DevicesResponse devices = Deserialize<DevicesResponse>(devicesJson);
 
-				// Send and deserialize PSU
 				string psuJson = await SendCommandAsync(miner.IP, "get_psu");
 				PsuResponse psu = Deserialize<PsuResponse>(psuJson);
 
-				// Initialize errorCode as null
 				ErrorCodeResponse errorCode = null;
 
-				// Handle get_error_code only if not blacklisted
 				if (!Blacklist.ContainsKey(miner.ID))
 				{
 					string errorCodeJson = await SendCommandAsync(miner.IP, "get_error_code");
@@ -105,13 +90,11 @@ namespace MinerPulse
 						}
 						catch (JsonException)
 						{
-							// If the JSON is invalid, treat it as an error
 							isInvalidCmd = false;
 						}
 
 						if (isInvalidCmd)
 						{
-							// Add miner to blacklist
 							Blacklist.TryAdd(miner.ID, true);
 							Console.ForegroundColor = ConsoleColor.DarkYellow;
 							Console.WriteLine($"⚠️ Miner {miner.ID} added to blacklist due to invalid cmd.");
@@ -119,23 +102,19 @@ namespace MinerPulse
 						}
 						else
 						{
-							// Attempt to deserialize
 							errorCode = Deserialize<ErrorCodeResponse>(errorCodeJson);
 						}
 					}
 				}
 
-				// Update MegaObject
-				MegaObject megaObject = Globals.MinerData.GetOrAdd(miner.ID, _ => new MegaObject());
+				MegaObject megaObject = Globals.MinerData.GetOrAdd(miner.ID,
+																   _ => new MegaObject());
 				megaObject.Summary = summary;
 				megaObject.Devices = devices;
 				megaObject.PSU = psu;
 				megaObject.ErrorCode = errorCode;
 
-				// Log incomplete data
-				string logMessage = (summary == null || devices == null || psu == null || (!Blacklist.ContainsKey(miner.ID) && errorCode == null))
-					? $"Incomplete data received for Miner ID {miner.ID:D2}."
-					: null;
+				string logMessage = (summary == null || devices == null || psu == null || (!Blacklist.ContainsKey(miner.ID) && errorCode == null)) ? $"Incomplete data received for Miner ID {miner.ID:D2}." : null;
 				logMessage?.LogWarning();
 			}
 			catch (Exception ex)
@@ -159,9 +138,7 @@ namespace MinerPulse
 				byte[] responseBytes = new byte[65536];
 				int bytesRead = await networkStream.ReadAsync(responseBytes, 0, responseBytes.Length);
 
-				string response = (bytesRead == 0)
-					? null
-					: Encoding.UTF8.GetString(responseBytes, 0, bytesRead);
+				string response = (bytesRead == 0) ? null : Encoding.UTF8.GetString(responseBytes, 0, bytesRead);
 
 				return (response != null && IsValidJson(response)) ? response : null;
 			}
@@ -172,7 +149,8 @@ namespace MinerPulse
 			}
 		}
 
-		private static T Deserialize<T>(string json) where T : class
+		private static T Deserialize<T>(string json)
+			where T : class
 		{
 			if (string.IsNullOrEmpty(json))
 				return null;
@@ -183,7 +161,6 @@ namespace MinerPulse
 			}
 			catch (JsonException)
 			{
-				// Log the deserialization error if needed
 				Console.ForegroundColor = ConsoleColor.DarkYellow;
 				Console.WriteLine($"[DEBUG] Failed to deserialize JSON to {typeof(T).Name}. JSON: {json}");
 				Console.ResetColor();
@@ -193,10 +170,12 @@ namespace MinerPulse
 
 		private static bool IsValidJson(string str)
 		{
-			if (string.IsNullOrWhiteSpace(str)) return false;
+			if (string.IsNullOrWhiteSpace(str))
+				return false;
 
 			str = str.Trim();
-			if ((!str.StartsWith("{") || !str.EndsWith("}")) && (!str.StartsWith("[") || !str.EndsWith("]"))) return false;
+			if ((!str.StartsWith("{") || !str.EndsWith("}")) && (!str.StartsWith("[") || !str.EndsWith("]")))
+				return false;
 
 			try
 			{

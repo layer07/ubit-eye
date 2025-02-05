@@ -7,7 +7,7 @@ using MessagePack;
 namespace MinerPulse.Models
 {
 	/// <summary>
-	/// A custom JsonConverter that converts a JSON value to a string, handling both string and numeric types.
+	/// A simple JsonConverter that converts a JSON value to a string, handling both string and numeric types.
 	/// </summary>
 	public class StringOrNumberJsonConverter : JsonConverter<string>
 	{
@@ -151,7 +151,6 @@ namespace MinerPulse.Models
 		[JsonPropertyName("Pool Stale%")]
 		public double PoolStalePercentage { get; set; }
 
-		// Continue with other properties...
 		[Key("Uptime")]
 		[JsonPropertyName("Uptime")]
 		public int Uptime { get; set; }
@@ -452,16 +451,12 @@ namespace MinerPulse.Models
 		[JsonPropertyName("get_error_code")]
 		public ErrorCodeResponse ErrorCode { get; set; }
 
-		// Placeholder for any additional error handling logic
 		[IgnoreMember]
 		[JsonIgnore]
 		public string ErrorMeaning { get; set; }
 
 		[IgnoreMember]
 		[JsonIgnore]
-		public string ErrorSolution { get; set; }
-
-		// Minimal error details population method
-		
+		public string ErrorSolution { get; set; }		
 	}
 }

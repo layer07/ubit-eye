@@ -12,24 +12,14 @@ namespace MinerPulse
 			{
 				WillGetter inc = MessagePackSerializer.Deserialize<WillGetter>(byteMsg);
 
-				string username = inc.PrivateKey != Guid.Empty
-					? MemDB.PrivateKeyToUsername(inc.PrivateKey)
-					: null;
+				string username = inc.PrivateKey != Guid.Empty ? MemDB.PrivateKeyToUsername(inc.PrivateKey) : null;
 
 				bool isInvalidLogin = inc.PrivateKey != Guid.Empty && username == null;
 
-				WiredStream w = new WiredStream
-				{
-					Will = inc.Will,
-					RAW_MESSAGE = byteMsg,
-					SOCKET = socket,
-					StringVal = inc.StringVal,
-					IntVal = inc.IntVal,
-					GuidVal = inc.GuidVal,
-					IsLoggedIn = username != null
-				};
+				WiredStream w = new WiredStream { Will = inc.Will, RAW_MESSAGE = byteMsg, SOCKET = socket, StringVal = inc.StringVal, IntVal = inc.IntVal, GuidVal = inc.GuidVal, IsLoggedIn = username != null };
 
-				if(w.IsLoggedIn){
+				if (w.IsLoggedIn)
+				{
 					w.FullUser = MemDB.GetFullUser(inc.PrivateKey);
 				}
 

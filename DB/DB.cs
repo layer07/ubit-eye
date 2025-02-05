@@ -1,6 +1,4 @@
 ﻿using SQLite;
-using System;
-using System.IO;
 
 namespace MinerPulse
 {
@@ -21,22 +19,18 @@ namespace MinerPulse
 
 		public static Dictionary<Guid, string> GetAllPrivateKeysAndUsernames()
 		{
-			return COREDB
-				.Table<Auth>()
-				.ToDictionary(user => user.PrivateKey, user => user.Username);
+			return COREDB.Table<Auth>().ToDictionary(user => user.PrivateKey, user => user.Username);
 		}
 
 		public static string PrivateKeyToUsername(Guid PrivateKey)
 		{
-			return COREDB.Table<Auth>().FirstOrDefault(x => x.PrivateKey == PrivateKey)?.Username
-				?? Globals.Owner;
+			return COREDB.Table<Auth>().FirstOrDefault(x => x.PrivateKey == PrivateKey)?.Username ?? Globals.Owner;
 		}
 
 		public static Auth LoginPrivateKey(Guid PrivateKey)
 		{
 			return DB.COREDB.Table<Auth>().Where(x => x.PrivateKey == PrivateKey).FirstOrDefault();
 		}
-
 
 		private static void InitializeDatabase()
 		{
@@ -63,19 +57,15 @@ namespace MinerPulse
 			}
 			catch (Exception ex)
 			{
-				// Print the full exception details, including inner exceptions
 				Console.WriteLine("Error during DB initialization: " + ex.ToString());
 				throw;
 			}
 		}
-
 
 		private static void CreateTables()
 		{
 			COREDB.CreateTable<Auth>();
 			Console.WriteLine("Database tables created.");
 		}
-
-		
 	}
 }

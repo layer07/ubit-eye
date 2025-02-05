@@ -21,14 +21,7 @@
  *           ░  ░     ░  ░░ ░        ░  ░   ░     
  */
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
-using MinerPulse.Models;
 
 namespace MinerPulse
 {
@@ -44,7 +37,6 @@ namespace MinerPulse
 			int timeoutMs = 500;
 			int concurrencyLimit = 100;
 
-			// Retrieve IP range
 			string ipAddrStart = ConfigParser.Config.Miners.IP_ADDR_START?.ToString() ?? "192.168.15.1";
 			string ipAddrEnd = ConfigParser.Config.Miners.IP_ADDR_END?.ToString() ?? "192.168.15.254";
 
@@ -60,12 +52,15 @@ namespace MinerPulse
 				ipAddrEnd = IPE;
 			}
 
-			// Header
 			Console.WriteLine($"{Rgb(82)}▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▜");
 			Console.WriteLine($"{Rgb(46)}▌ {Rgb(226)}SCANNING NETWORK: {Rgb(39)}{ipAddrStart} {Rgb(196)}»»» {Rgb(39)}{ipAddrEnd} {Rgb(46)}▐");
 			Console.WriteLine($"{Rgb(82)}▙▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▟\x1b[0m\n");
 
-			// Validate IP format
+			if (ipAddrStart == null || ipAddrEnd == null)
+			{
+				return;
+			}
+
 			string[] startSegments = ipAddrStart.Split('.');
 			string[] endSegments = ipAddrEnd.Split('.');
 
@@ -75,7 +70,6 @@ namespace MinerPulse
 				return;
 			}
 
-			// Subnet validation
 			bool sameSubnet = startSegments[0] == endSegments[0] &&
 							startSegments[1] == endSegments[1] &&
 							startSegments[2] == endSegments[2];
@@ -89,7 +83,6 @@ namespace MinerPulse
 			string baseIp = $"{startSegments[0]}.{startSegments[1]}.{startSegments[2]}.";
 			int startRange, endRange;
 
-			// IP parsing validation
 			if (!int.TryParse(startSegments[3], out startRange) || !int.TryParse(endSegments[3], out endRange))
 			{
 				Console.WriteLine($"{Rgb(196)}[!] {Rgb(214)}INVALID IP RANGE SEGMENTS\x1b[0m");
@@ -102,7 +95,6 @@ namespace MinerPulse
 				return;
 			}
 
-			// Scanning parameters display
 			Console.WriteLine($"{Rgb(45)}══════════════ {Rgb(46)}SCAN PARAMETERS {Rgb(45)}══════════════");
 			Console.WriteLine($"{Rgb(75)}» HOST RANGE:\t{Rgb(228)}{baseIp}{startRange} {Rgb(196)}➔ {Rgb(228)}{baseIp}{endRange}");
 			Console.WriteLine($"{Rgb(75)}» TOTAL HOSTS:\t{Rgb(228)}{endRange - startRange + 1}");
@@ -175,7 +167,6 @@ namespace MinerPulse
 
 			await Task.WhenAll(tasks);
 
-			// Final report
 			Console.WriteLine($"\n{Rgb(45)}════════════════ {Rgb(46)}SCAN SUMMARY {Rgb(45)}════════════════");
 			Console.WriteLine($"{Rgb(75)}» TOTAL SCANNED:\t{Rgb(228)}{endRange - startRange + 1}");
 			Console.WriteLine($"{Rgb(75)}» LIVE HOSTS:\t\t{Rgb(46)}{discovered}");
