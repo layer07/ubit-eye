@@ -1,0 +1,62 @@
+# Just Ignore
+bin/
+obj/
+
+# Publish output
+Publish/
+*.publish.xml
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files by Visual Studio
+.vs/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# NuGet packages
+*.nupkg
+# The packages folder can be ignored if you restore NuGet packages
+packages/
+
+# ASP.NET temporary files
+aspnet_client/
+wwwroot/lib/
+
+# Files built by Visual Studio
+*.cache
+*.ilk
+*.log
+*.pdb
+*.obj
+*.exe
+*.dll
+
+# DotCover
+*.dotCover
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Local configuration files
+appsettings.json
+appsettings.*.json
+
+# Certificates, keys, and other sensitive files (adjust as needed)
+*.pfx
+*.key
+
+# Miscellaneous
+*.vspscc
+*.vssscc
+
+# IDE-specific folders
+.idea/
+*.sln.ide
+
+# Git directory
+.git/
