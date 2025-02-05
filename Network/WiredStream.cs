@@ -44,56 +44,55 @@ namespace MinerPulse
 
 		private Dictionary<string, object> CreateUserStream(string will, dynamic streamInfo, dynamic obj = null, string message = "", long? timestamp = null, string msg1 = "", string msg2 = "", string line = "", bool? error = null, bool SUCC = false)
 		{
-			var userStream = new Dictionary<string, object>
-			{
-				{ "Will", will },
-				{ "StreamInfo", streamInfo }
-			};
+			var userStream = new Dictionary<string, object> { { "Will", will }, { "StreamInfo", streamInfo } };
 
-			if (obj != null) userStream["Obj"] = obj;
-			if (!string.IsNullOrEmpty(message)) userStream["Message"] = message;
-			if (timestamp.HasValue) userStream["Timestamp"] = timestamp.Value;
-			if (!string.IsNullOrEmpty(msg1)) userStream["Msg1"] = msg1;
-			if (!string.IsNullOrEmpty(msg2)) userStream["Msg2"] = msg2;
-			if (!string.IsNullOrEmpty(line)) userStream["LINE"] = line;
-			
-			if (error.HasValue) userStream["ERROR"] = error.Value;
+			if (obj != null)
+				userStream["Obj"] = obj;
+			if (!string.IsNullOrEmpty(message))
+				userStream["Message"] = message;
+			if (timestamp.HasValue)
+				userStream["Timestamp"] = timestamp.Value;
+			if (!string.IsNullOrEmpty(msg1))
+				userStream["Msg1"] = msg1;
+			if (!string.IsNullOrEmpty(msg2))
+				userStream["Msg2"] = msg2;
+			if (!string.IsNullOrEmpty(line))
+				userStream["LINE"] = line;
+
+			if (error.HasValue)
+				userStream["ERROR"] = error.Value;
 
 			return userStream;
 		}
 
 		private Dictionary<string, object> CreateUserStreamMini(string will, dynamic streamInfo, bool OKAY = false)
 		{
-			var userStream = new Dictionary<string, object>
-			{
-				{ "Will", will },
-				{ "StreamInfo", streamInfo }
-			};
-
-			
+			var userStream = new Dictionary<string, object> { { "Will", will }, { "StreamInfo", streamInfo } };
 
 			userStream["OKAY"] = OKAY;
-
 
 			return userStream;
 		}
 
 		private Dictionary<string, object> CreateUserStreamSucc(string will, dynamic streamInfo, dynamic obj = null, string message = "", long? timestamp = null, string msg1 = "", string msg2 = "", string line = "", bool? error = null)
 		{
-			var userStream = new Dictionary<string, object>
-			{
-				{ "Will", will },
-				{ "StreamInfo", streamInfo }
-			};
+			var userStream = new Dictionary<string, object> { { "Will", will }, { "StreamInfo", streamInfo } };
 
-			if (obj != null) userStream["Obj"] = obj;
-			if (!string.IsNullOrEmpty(message)) userStream["Message"] = message;
-			if (timestamp.HasValue) userStream["Timestamp"] = timestamp.Value;
-			if (!string.IsNullOrEmpty(msg1)) userStream["Msg1"] = msg1;
-			if (!string.IsNullOrEmpty(msg2)) userStream["Msg2"] = msg2;
-			if (!string.IsNullOrEmpty(line)) userStream["LINE"] = line;
+			if (obj != null)
+				userStream["Obj"] = obj;
+			if (!string.IsNullOrEmpty(message))
+				userStream["Message"] = message;
+			if (timestamp.HasValue)
+				userStream["Timestamp"] = timestamp.Value;
+			if (!string.IsNullOrEmpty(msg1))
+				userStream["Msg1"] = msg1;
+			if (!string.IsNullOrEmpty(msg2))
+				userStream["Msg2"] = msg2;
+			if (!string.IsNullOrEmpty(line))
+				userStream["LINE"] = line;
 
-			if (error.HasValue) userStream["ERROR"] = error.Value;
+			if (error.HasValue)
+				userStream["ERROR"] = error.Value;
 
 			return userStream;
 		}
@@ -104,7 +103,7 @@ namespace MinerPulse
 
 			var userStream = CreateUserStream(NEW_WILL != "DEFAULT_WILL" ? NEW_WILL : Will, streamInfo, OBJ);
 			SendMessage(userStream);
-			//UNSLogs.LogSent(this, streamInfo);
+			// UNSLogs.LogSent(this, streamInfo);
 		}
 
 		public void RUSH(string NEW_WILL = "ACK", string MSG = "", long? TimeStamp = null)

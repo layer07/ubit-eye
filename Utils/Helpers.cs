@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Helpers.cs
- * 
+ *
  * Version: @(#)Helpers.cs 0.0.02 15/01/2025
  *
  * Description: Utility functions for MinerStack, including a header printer and asynchronous scanner.
@@ -10,29 +10,20 @@
  * URL: https://kernelriot.com
  * Github: /layer07
  *
- *        ██▓    ▄▄▄     ▓██   ██▓▓█████  ██▀███  
+ *        ██▓    ▄▄▄     ▓██   ██▓▓█████  ██▀███
  *       ▓██▒   ▒████▄    ▒██  ██▒▓█   ▀ ▓██ ▒ ██▒
  *       ▒██░   ▒██  ▀█▄   ▒██ ██░▒███   ▓██ ░▄█ ▒
- *       ▒██░   ░██▄▄▄▄██  ░ ▐██▓░▒▓█ ▄ ▒██▀▀█▄  
+ *       ▒██░   ░██▄▄▄▄██  ░ ▐██▓░▒▓█ ▄ ▒██▀▀█▄
  *       ░██████▒▓█   ▓██▒ ░ ██▒▓░░▒████▒░██▓ ▒██▒
  *       ░ ▒░▓  ░▒▒   ▓▒█░  ██▒▒▒ ░░ ▒░ ░░ ▒▓ ░▒▓░
  *       ░ ░ ▒  ░ ▒   ▒▒ ░▓██ ░▒░  ░ ░  ░  ░▒ ░ ▒░
- *         ░ ░    ░   ▒   ▒ ▒ ░░     ░     ░░   ░ 
- *           ░  ░     ░  ░░ ░        ░  ░   ░     
+ *         ░ ░    ░   ▒   ▒ ▒ ░░     ░     ░░   ░
+ *           ░  ░     ░  ░░ ░        ░  ░   ░
  */
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using static MinerPulse.Watcher;
 using MinerPulse.Models;
 using System.Runtime.InteropServices;
-using System.Reflection;
 
 namespace MinerPulse
 {
@@ -60,13 +51,7 @@ namespace MinerPulse
 		public static BENCHMARK CREATE_BENCH(long startTime)
 		{
 			long elapsedTicks = Globals.RUNTIME_SW.ElapsedTicks - startTime;
-			return new BENCHMARK
-			{
-				NanoSeconds = elapsedTicks * Globals.Penalty,
-				MilliSeconds = $"{(double)elapsedTicks / Globals.SecPenalty:0.000} ms",
-				Ticks = elapsedTicks,
-				MS = elapsedTicks / Globals.SecPenalty
-			};
+			return new BENCHMARK { NanoSeconds = elapsedTicks * Globals.Penalty, MilliSeconds = $"{(double)elapsedTicks / Globals.SecPenalty:0.000} ms", Ticks = elapsedTicks, MS = elapsedTicks / Globals.SecPenalty };
 		}
 
 		public static bool OS_Check()
@@ -81,33 +66,21 @@ namespace MinerPulse
 		public static AggregatedMinerData GetAggregatedMinerData()
 		{
 			// Sum of all HS RT
-			double totalHsRt = Globals.MinerData.Values
-				.Where(m => m.Summary?.Summaries != null)
-				.Sum(m => m.Summary.Summaries.Sum(s => s.HsRt));
+			double totalHsRt = Globals.MinerData.Values.Where(m => m.Summary?.Summaries != null).Sum(m => m.Summary.Summaries.Sum(s => s.HsRt));
 
 			// Sum of all Power
-			double totalPower = Globals.MinerData.Values
-				.Where(m => m.Summary?.Summaries != null)
-				.Sum(m => m.Summary.Summaries.Sum(s => s.Power));
+			double totalPower = Globals.MinerData.Values.Where(m => m.Summary?.Summaries != null).Sum(m => m.Summary.Summaries.Sum(s => s.Power));
 
 			// Sum of all Accepted and Rejected
-			int totalAccepted = Globals.MinerData.Values
-				.Where(m => m.Summary?.Summaries != null)
-				.Sum(m => m.Summary.Summaries.Sum(s => s.Accepted));
+			int totalAccepted = Globals.MinerData.Values.Where(m => m.Summary?.Summaries != null).Sum(m => m.Summary.Summaries.Sum(s => s.Accepted));
 
-			int totalRejected = Globals.MinerData.Values
-				.Where(m => m.Summary?.Summaries != null)
-				.Sum(m => m.Summary.Summaries.Sum(s => s.Rejected));
+			int totalRejected = Globals.MinerData.Values.Where(m => m.Summary?.Summaries != null).Sum(m => m.Summary.Summaries.Sum(s => s.Rejected));
 
 			// List of VINs under PSU
-			var vinList = Globals.MinerData.Values
-				.Where(m => m.PSU?.Msg?.Vin != null)
-				.Select(m => m.PSU.Msg.Vin)
-				.ToList();
-			
+			var vinList = Globals.MinerData.Values.Where(m => m.PSU?.Msg?.Vin != null).Select(m => m.PSU.Msg.Vin).ToList();
+
 			return new AggregatedMinerData(totalHsRt, totalPower, totalAccepted, totalRejected, vinList);
 		}
-
 
 		public static void DumpAllMiners()
 		{
@@ -162,9 +135,5 @@ namespace MinerPulse
 				Console.WriteLine();
 			}
 		}
-
-		
-
-
 	}
 }

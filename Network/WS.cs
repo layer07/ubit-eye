@@ -19,17 +19,13 @@ namespace MinerPulse
 
 			X509Certificate2 certificate = new X509Certificate2(certPath, "102030");
 
-			var server = new WebSocketServer($"wss://0.0.0.0:{ConfigParser.Config.Web.WSS_PORT}")
-			{
-				Certificate = certificate
-			};
+			var server = new WebSocketServer($"wss://0.0.0.0:{ConfigParser.Config.Web.WSS_PORT}") { Certificate = certificate };
 
 			server.EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Ssl3 | SslProtocols.Tls11 | SslProtocols.Tls;
 			PreJitCriticalMethods();
 
 			server.ListenerSocket.NoDelay = true;
-			server.Start(socket =>
-			{
+			server.Start(socket => {
 				socket.OnOpen = () => WS_OPEN(socket);
 				socket.OnClose = () => WS_CLOSE(socket);
 				socket.OnMessage = async message => await WS_RECV_STR(socket, message);
@@ -47,31 +43,22 @@ namespace MinerPulse
 		{
 			try
 			{
-
 			}
 			catch (Exception ex)
 			{
-
 			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void WS_CLOSE(IWebSocketConnection SOCKET)
-		{
-
-		}
+		public static void WS_CLOSE(IWebSocketConnection SOCKET) { }
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void WS_RECV(IWebSocketConnection SOCKET, byte[] BYTE_MSG)
 		{
-
 			_ = new Logic(SOCKET, BYTE_MSG);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static async Task WS_RECV_STR(IWebSocketConnection SOCKET, string MESSAGE)
-		{
-
-		}
+		public static async Task WS_RECV_STR(IWebSocketConnection SOCKET, string MESSAGE) { }
 	}
 }

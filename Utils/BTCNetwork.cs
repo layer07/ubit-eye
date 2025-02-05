@@ -30,7 +30,6 @@ public class NetworkData
 	public double USDEUR { get; set; }
 	public double USDCNY { get; set; }
 	public double ETHValueNow { get; set; }
-
 }
 
 public static class GlobalData
@@ -46,7 +45,6 @@ public static class NetworkDataFetcher
 	{
 		try
 		{
-
 			string url = "https://data.hashrateindex.com/hi-api/hashrateindex/network/overview";
 			var response = httpClient.GetAsync(url).Result;
 			if (!response.IsSuccessStatusCode)
@@ -67,16 +65,12 @@ public static class NetworkDataFetcher
 				using (JsonDocument doc = JsonDocument.Parse(btcContent))
 				{
 					var root = doc.RootElement;
-					var rateString = root.GetProperty("bpi")
-										 .GetProperty("USD")
-										 .GetProperty("rate")
-										 .GetString();
+					var rateString = root.GetProperty("bpi").GetProperty("USD").GetProperty("rate").GetString();
 
 					rateString = rateString.Replace(",", "");
 
 					if (decimal.TryParse(rateString, out decimal btcValueNow))
 					{
-
 						networkOverview.data.BTCValueNow = btcValueNow;
 					}
 				}
@@ -141,8 +135,7 @@ public static class NetworkDataFetcher
 				var ethPriceContent = ethPriceResponse.Content.ReadAsStringAsync().Result;
 				using (JsonDocument doc = JsonDocument.Parse(ethPriceContent))
 				{
-					if (doc.RootElement.TryGetProperty("USD", out JsonElement usdElement) &&
-						usdElement.TryGetDouble(out double ethPrice))
+					if (doc.RootElement.TryGetProperty("USD", out JsonElement usdElement) && usdElement.TryGetDouble(out double ethPrice))
 					{
 						networkOverview.data.ETHValueNow = ethPrice;
 					}
@@ -157,12 +150,7 @@ public static class NetworkDataFetcher
 		}
 		catch
 		{
-
-			var emptyOverview = new NetworkOverview
-			{
-				schema = string.Empty,
-				data = new NetworkData()
-			};
+			var emptyOverview = new NetworkOverview { schema = string.Empty, data = new NetworkData() };
 			GlobalData.NetworkOverviewGlobal = emptyOverview;
 		}
 	}

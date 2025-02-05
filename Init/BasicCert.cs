@@ -15,7 +15,6 @@ namespace MinerPulse
 	{
 		public static void EnsureCertificate()
 		{
-			// Get current folder (works on both Windows and Linux)
 			string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 			string certPath = Path.Combine(baseDir, "cert.pfx");
 
@@ -27,9 +26,7 @@ namespace MinerPulse
 
 				try
 				{
-					// Decode the Base64 string into a byte array.
 					byte[] certBytes = Convert.FromBase64String(BasicCert.CertString);
-					// Write the certificate file to the current folder.
 					File.WriteAllBytes(certPath, certBytes);
 
 					Console.ForegroundColor = ConsoleColor.Green;

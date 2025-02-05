@@ -110,7 +110,7 @@ public static Dictionary<string, (string Meaning, string Solution)> errorCodes =
 			{
 				return details;
 			}
-			return ("Unknown", "Unknown"); // Default for not found
+			return ("Unknown", "Unknown"); // Default for unknown error
 		}
 
 

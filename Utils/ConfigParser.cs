@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * ConfigParser.cs
- * 
+ *
  * Version: @(#)ConfigParser.cs 0.0.03 15/01/2025
  *
  * Description: Quick hack for reading a config file.
@@ -10,15 +10,15 @@
  * URL: https://kernelriot.com
  * Github: /layer07
  *
- *        ██▓    ▄▄▄     ▓██   ██▓▓█████  ██▀███  
+ *        ██▓    ▄▄▄     ▓██   ██▓▓█████  ██▀███
  *       ▓██▒   ▒████▄    ▒██  ██▒▓█   ▀ ▓██ ▒ ██▒
  *       ▒██░   ▒██  ▀█▄   ▒██ ██░▒███   ▓██ ░▄█ ▒
- *       ▒██░   ░██▄▄▄▄██  ░ ▐██▓░▒▓█ ▄ ▒██▀▀█▄  
+ *       ▒██░   ░██▄▄▄▄██  ░ ▐██▓░▒▓█ ▄ ▒██▀▀█▄
  *       ░██████▒▓█   ▓██▒ ░ ██▒▓░░▒████▒░██▓ ▒██▒
  *       ░ ▒░▓  ░▒▒   ▓▒█░  ██▒▒▒ ░░ ▒░ ░░ ▒▓ ░▒▓░
  *       ░ ░ ▒  ░ ▒   ▒▒ ░▓██ ░▒░  ░ ░  ░  ░▒ ░ ▒░
- *         ░ ░    ░   ▒   ▒ ▒ ░░     ░     ░░   ░ 
- *           ░  ░     ░  ░░ ░        ░  ░   ░     
+ *         ░ ░    ░   ▒   ▒ ▒ ░░     ░     ░░   ░
+ *           ░  ░     ░  ░░ ░        ░  ░   ░
  */
 
 using System;
@@ -29,14 +29,13 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Linq;
-using System.Drawing; 
-
+using System.Drawing;
 
 namespace MinerPulse
 {
 	/// <summary>
 	/// Parses and manages application configuration from a fixed or specified file location.
-	/// Supports dynamic access to configuration values with a 1337 twist.
+	/// Supports dynamic access to configuration values, simple.
 	/// </summary>
 	public static class ConfigParser
 	{
@@ -52,8 +51,7 @@ namespace MinerPulse
 		/// </summary>
 		/// <param name="enable_debug">Flag to enable debug mode.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void load_config(bool enable_debug = false) =>
-			load_config(Path.Combine(get_application_base_path(), "app.conf"), enable_debug);
+		public static void load_config(bool enable_debug = false) => load_config(Path.Combine(get_application_base_path(), "app.conf"), enable_debug);
 
 		/// <summary>
 		/// Loads and parses the configuration file from the specified path. Enables debug mode if specified.
@@ -98,7 +96,7 @@ namespace MinerPulse
 				config_data[section_name] = key_values;
 				log_info($"Section '{section_name}' parsed with {key_values.Count} key-value pair(s).");
 			}
-						
+
 			Config = ConvertToExpando(config_data);
 
 			if (enable_debug)
@@ -142,11 +140,7 @@ namespace MinerPulse
 		/// <param name="value_str">The string value to parse.</param>
 		/// <returns>Parsed object.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static object parse_value_dynamically(string value_str) =>
-			bool.TryParse(value_str, out bool b) ? (object)b :
-			Guid.TryParse(value_str, out Guid g) ? (object)g :
-			int.TryParse(value_str, out int i) ? (object)i :
-			(object)value_str;
+		private static object parse_value_dynamically(string value_str) => bool.TryParse(value_str, out bool b) ? (object)b : Guid.TryParse(value_str, out Guid g) ? (object)g : int.TryParse(value_str, out int i) ? (object)i : (object)value_str;
 
 		/// <summary>
 		/// Retrieves a string value from the configuration.
@@ -156,10 +150,7 @@ namespace MinerPulse
 		/// <param name="default_value">Default value if key not found.</param>
 		/// <returns>String value.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static string parse_as_string(string section, string key, string default_value = null) =>
-			config_data.ContainsKey(section) && config_data[section].ContainsKey(key)
-				? config_data[section][key]?.ToString()
-				: default_value;
+		public static string parse_as_string(string section, string key, string default_value = null) => config_data.ContainsKey(section) && config_data[section].ContainsKey(key) ? config_data[section][key]?.ToString() : default_value;
 
 		/// <summary>
 		/// Retrieves and normalizes a path from the configuration.
@@ -169,10 +160,7 @@ namespace MinerPulse
 		/// <param name="default_path">Default path if key not found.</param>
 		/// <returns>Normalized path.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static string parse_as_path(string section, string key, string default_path = null) =>
-			!string.IsNullOrWhiteSpace(parse_as_string(section, key, default_path))
-				? TryGetFullPath(parse_as_string(section, key), default_path)
-				: default_path;
+		public static string parse_as_path(string section, string key, string default_path = null) => !string.IsNullOrWhiteSpace(parse_as_string(section, key, default_path)) ? TryGetFullPath(parse_as_string(section, key), default_path) : default_path;
 
 		/// <summary>
 		/// Retrieves an integer value from the configuration.
@@ -182,11 +170,7 @@ namespace MinerPulse
 		/// <param name="default_value">Default integer if parsing fails.</param>
 		/// <returns>Integer value.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int parse_as_int(string section, string key, int default_value = 0) =>
-			config_data.ContainsKey(section) && config_data[section].ContainsKey(key)
-				? (config_data[section][key] is int val ? val :
-				   (config_data[section][key] is string s && int.TryParse(s, out int parsed) ? parsed : default_value))
-				: default_value;
+		public static int parse_as_int(string section, string key, int default_value = 0) => config_data.ContainsKey(section) && config_data[section].ContainsKey(key) ? (config_data[section][key] is int val ? val : (config_data[section][key] is string s && int.TryParse(s, out int parsed) ? parsed : default_value)) : default_value;
 
 		/// <summary>
 		/// Retrieves a boolean value from the configuration.
@@ -196,11 +180,7 @@ namespace MinerPulse
 		/// <param name="default_value">Default boolean if parsing fails.</param>
 		/// <returns>Boolean value.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool parse_as_bool(string section, string key, bool default_value = false) =>
-			config_data.ContainsKey(section) && config_data[section].ContainsKey(key)
-				? (config_data[section][key] is bool val ? val :
-				   (config_data[section][key] is string s && bool.TryParse(s, out bool parsed) ? parsed : default_value))
-				: default_value;
+		public static bool parse_as_bool(string section, string key, bool default_value = false) => config_data.ContainsKey(section) && config_data[section].ContainsKey(key) ? (config_data[section][key] is bool val ? val : (config_data[section][key] is string s && bool.TryParse(s, out bool parsed) ? parsed : default_value)) : default_value;
 
 		/// <summary>
 		/// Retrieves a GUID value from the configuration.
@@ -210,11 +190,7 @@ namespace MinerPulse
 		/// <param name="default_value">Default GUID if parsing fails.</param>
 		/// <returns>GUID value.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Guid parse_as_guid(string section, string key, Guid default_value = default) =>
-			config_data.ContainsKey(section) && config_data[section].ContainsKey(key)
-				? (config_data[section][key] is Guid val ? val :
-				   (config_data[section][key] is string s && Guid.TryParse(s, out Guid parsed) ? parsed : default_value))
-				: default_value;
+		public static Guid parse_as_guid(string section, string key, Guid default_value = default) => config_data.ContainsKey(section) && config_data[section].ContainsKey(key) ? (config_data[section][key] is Guid val ? val : (config_data[section][key] is string s && Guid.TryParse(s, out Guid parsed) ? parsed : default_value)) : default_value;
 
 		/// <summary>
 		/// Retrieves a list of strings from the configuration, split by a delimiter.
@@ -225,8 +201,7 @@ namespace MinerPulse
 		/// <param name="default_list">Default list if key not found.</param>
 		/// <returns>List of strings.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static List<string> parse_as_list(string section, string key, char delimiter = ',', List<string> default_list = null) =>
-			parse_as_string(section, key)?.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList() ?? default_list ?? new();
+		public static List<string> parse_as_list(string section, string key, char delimiter = ',', List<string> default_list = null) => parse_as_string(section, key)?.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList() ?? default_list ?? new();
 
 		/// <summary>
 		/// Retrieves a value from the configuration using a custom parser.
@@ -238,10 +213,7 @@ namespace MinerPulse
 		/// <param name="default_value">Default value if parsing fails.</param>
 		/// <returns>Parsed value of type T.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static T parse_value<T>(string section, string key, Func<string, T> parser, T default_value = default) =>
-			parse_as_string(section, key) is string value_str
-				? TryParse(parser, value_str, default_value)
-				: default_value;
+		public static T parse_value<T>(string section, string key, Func<string, T> parser, T default_value = default) => parse_as_string(section, key) is string value_str ? TryParse(parser, value_str, default_value) : default_value;
 
 		/// <summary>
 		/// Displays all configuration entries with their types.
@@ -291,16 +263,15 @@ namespace MinerPulse
 		/// <param name="type">The Type to map.</param>
 		/// <returns>String label representing the Type.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static string GetTypeLabel(Type type) =>
-			type switch
-			{
-				Type t when t == typeof(bool) => "BOOL",
-				Type t when t == typeof(Guid) => "GUID",
-				Type t when t == typeof(int) => "INT",
-				Type t when t == typeof(string) => "STRING",
-				Type t when t == typeof(double) => "DOUBLE",
-				_ => type.Name.ToUpper()
-			};
+		private static string GetTypeLabel(Type type) => type switch
+		{
+			Type t when t == typeof(bool) => "BOOL",
+			Type t when t == typeof(Guid) => "GUID",
+			Type t when t == typeof(int) => "INT",
+			Type t when t == typeof(string) => "STRING",
+			Type t when t == typeof(double) => "DOUBLE",
+			_ => type.Name.ToUpper()
+		};
 
 		/// <summary>
 		/// Logs informational messages.
@@ -355,8 +326,7 @@ namespace MinerPulse
 		/// <param name="default_path">Default path if invalid.</param>
 		/// <returns>Full path.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static string TryGetFullPath(string path, string default_path) =>
-			Path.GetFullPath(path, get_application_base_path()) ?? default_path;
+		private static string TryGetFullPath(string path, string default_path) => Path.GetFullPath(path, get_application_base_path()) ?? default_path;
 
 		/// <summary>
 		/// Tries to parse a value using a provided parser function.
@@ -367,14 +337,12 @@ namespace MinerPulse
 		/// <param name="default_value">Default value if parsing fails.</param>
 		/// <returns>Parsed value or default.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static T TryParse<T>(Func<string, T> parser, string value, T default_value) =>
-			parser != null ? (parser.Invoke(value) ?? default_value) : default_value;
+		private static T TryParse<T>(Func<string, T> parser, string value, T default_value) => parser != null ? (parser.Invoke(value) ?? default_value) : default_value;
 
 		/// <summary>
 		/// Retrieves all configuration data.
 		/// </summary>
 		/// <returns>Read-only dictionary of configurations.</returns>
-		public static IReadOnlyDictionary<string, Dictionary<string, object>> get_all_config() =>
-			new Dictionary<string, Dictionary<string, object>>(config_data, StringComparer.OrdinalIgnoreCase);
+		public static IReadOnlyDictionary<string, Dictionary<string, object>> get_all_config() => new Dictionary<string, Dictionary<string, object>>(config_data, StringComparer.OrdinalIgnoreCase);
 	}
 }
